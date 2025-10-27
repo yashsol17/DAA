@@ -1,0 +1,52 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int n;
+set<int> cols;
+set<int> posDiag;
+set<int> negDiag;
+
+vector<string> board;
+vector<vector<string>> res;
+void bt(int r)
+{
+    if (r == n)
+    {
+        res.push_back(board);
+        return;
+    };
+
+    for (int c = 0; c < n; c++)
+    {
+        if (cols.count(c) or posDiag.count(r + c) or negDiag.count(r - c))
+            continue;
+
+        cols.insert(c);
+        posDiag.insert(r + c);
+        negDiag.insert(r - c);
+        board[r][c] = 'Q';
+        bt(r + 1);
+        cols.erase(c);
+        posDiag.erase(r + c);
+        negDiag.erase(r - c);
+        board[r][c] = '.';
+    }
+}
+int main()
+{
+    cout << "enter the size of n ";
+    cin >> n;
+    board.assign(n, string(n, '.'));
+    bt(0);
+
+    for (vector<string> x : res)
+    {
+        for (string y : x)
+        {
+            cout << y << "\n";
+        }
+        cout << "\n";
+    }
+
+    return 0;
+}
